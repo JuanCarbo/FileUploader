@@ -21,7 +21,7 @@ namespace Corvo.FileUploader.Tests.Acceptance.Api.Controllers
         {
             mediator = new Mock<IMediator>();
 
-            fileUploadController = new FileUploadController();
+            fileUploadController = new FileUploadController(mediator.Object);
         }
 
         [Fact(DisplayName = "Should receive a FormFile and a location and send it to a mediator")]
