@@ -1,15 +1,19 @@
 ﻿using Flunt.Notifications;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace Corvo.FileUploader.Application.Notifications
 {
     public class Result : Notifiable
     {
-        public Result(IReadOnlyCollection<Notification> notifications)
+        public Result(IReadOnlyCollection<Notification> notifications, StatusCode statusCode)
         {
-            AddNotifications(notifications);
+            this.AddNotifications(notifications);
+            Error = statusCode;
         }
+
+        public StatusCode Error { get; }
     }
 }

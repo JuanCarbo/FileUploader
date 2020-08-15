@@ -7,10 +7,10 @@ namespace Corvo.FileUploader.Application.Notifications
 {
     public class EntityResult<T> : Result where T : class
     {
-        public EntityResult(T data, IReadOnlyCollection<Notification> notifications) : base(notifications)
+        public EntityResult(T data, IReadOnlyCollection<Notification> notifications, StatusCode statusCode) : base(notifications, statusCode)
         {
             Data = data;
         }
-        public T Data { get; set; }
+        public T Data { get; }
     }
 }
