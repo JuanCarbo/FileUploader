@@ -9,5 +9,9 @@
     <PackageReference Include="MediatR" Version="8.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Corvo.FileUploader.Application\Corvo.FileUploader.Application.csproj" />
+  </ItemGroup>
+
 
 </Project>
