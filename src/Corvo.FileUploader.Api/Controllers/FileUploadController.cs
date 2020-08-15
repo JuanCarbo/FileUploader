@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using System.Threading.Tasks;
+using Corvo.FileUploader.Application.Operations.File.Upload;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Corvo.FileUploader.Api.Controllers
 {
@@ -22,7 +20,12 @@ namespace Corvo.FileUploader.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> PostFile(string filename, [FromForm] IFormFile file)
         {
-            
+            var result = await mediator.Send(new FileUploadRequest(filename, file));
+            if (result.Valid)
+            {
+                return Ok();
+            }
+            return new NotFoundResult();
         }
     }
 }
