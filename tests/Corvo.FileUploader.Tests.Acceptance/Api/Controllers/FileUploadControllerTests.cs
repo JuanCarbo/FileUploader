@@ -6,8 +6,12 @@ using Moq;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using System;
-using Microsoft.Extensions.Primitives;
 using System.Threading;
+using Corvo.FileUploader.Application.Operations.File.Upload;
+using Corvo.FileUploader.Application.Notifications;
+using System.Collections.ObjectModel;
+using Flunt.Notifications;
+using System.Collections.Generic;
 
 namespace Corvo.FileUploader.Tests.Acceptance.Api.Controllers
 {
@@ -28,17 +32,20 @@ namespace Corvo.FileUploader.Tests.Acceptance.Api.Controllers
         public async Task ReceivesAndSendsFile()
         {
             //Arrange
-            var file = File.OpenRead( $"{AppDomain.CurrentDomain.BaseDirectory}\\{FILESLOCATION}");
+            var file = File.OpenRead($"{AppDomain.CurrentDomain.BaseDirectory}\\{FILESLOCATION}");
             var formFile = new FormFile(file, 0, file.Length, file.Name, file.Name);
 
             var fileName = ".\\UploadTest.txt";
+
+            var notifications = new ReadOnlyCollection<Notification>(new List<Notification>());
+
+            mediator.Setup(x => x.Send(It.IsAny<FileUploadRequest>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(new EntityResult<FileUploadResult>(new FileUploadResult(), notifications, StatusCode.Ok)));
 
             //Act
             var result = await fileUploadController.PostFile(fileName, formFile);
 
             //Assert
-            mediator.Verify(x => x.Send(It.Is<FormFile>(x => x.FileName == fileName), It.IsAny<CancellationToken>()));
-
+            mediator.Verify(x => x.Send(It.Is<FileUploadRequest>(x => x.FileName == fileName && x.FormFile == formFile), It.IsAny<CancellationToken>()));
         }
 
     }
