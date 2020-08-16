@@ -17,8 +17,10 @@ namespace Corvo.FileUploader.Api.Controllers
         {
             this.mediator = mediator;
         }
+
         [HttpPost]
-        public async Task<IActionResult> PostFile(string filename, [FromForm] IFormFile file)
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> PostFile(string filename, IFormFile file)
         {
             var result = await mediator.Send(new FileUploadRequest(filename, file));
             if (result.Valid)
